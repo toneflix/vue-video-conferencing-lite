@@ -95,7 +95,7 @@
           <button
             class="con-control-btn con-hover-bg con-text-green"
             @click="start"
-            v-if="!status.show && (!autoConnect || status.loading)"
+            v-if="!status.show && isReady && (!autoConnect || status.loading)"
           >
             <vue-feather
               :type="`phone${status.loading ? '-call' : ''}`"
@@ -161,11 +161,11 @@ import { useResizeObserver } from "@vueuse/core";
 import { UseFullscreen } from "@vueuse/components";
 import {
   connect,
+  loadScripts,
   createAndJoinRoom,
   createTracksAndAddToRoom,
 } from "../constants/jitsi.utils.js";
 import bus from "../constants/EventBus";
-import JMeetJS from "@joinera/lib-jitsi-meet";
 import { defineProps, onBeforeUnmount, onMounted, ref, watch } from "vue";
 
 const emit = defineEmits([
@@ -173,6 +173,7 @@ const emit = defineEmits([
   "ready",
   "left",
   "joined",
+  "loading",
   "started",
   "stopped",
   "connected",
@@ -252,10 +253,7 @@ const props = defineProps({
   },
 });
 
-/**
- * @type {JMeetJS}
- */
-const JitsiMeetJS = window.JitsiMeetJS || JMeetJS;
+let JitsiMeetJS = window.JitsiMeetJS || {};
 
 const scenery = ref(null);
 useResizeObserver(scenery, () => {
@@ -285,9 +283,6 @@ const status = ref({
 const LOGLEVEL = props.debugLevel
   ? (props.debugLevel || "INFO").toUpperCase()
   : "ERROR";
-
-JitsiMeetJS.init();
-JitsiMeetJS.setLogLevel(JitsiMeetJS.logLevels[LOGLEVEL]);
 
 const addTrack = (track) => {
   if (track.getType() === "video" && props.allowVideo) {
@@ -433,12 +428,14 @@ const connectNow = () => {
       status.value.loading = false;
       status.value.show = true;
       emit("joined", room);
+      emit("loading", false);
     })
     .catch((error) => {
       console.error(error);
       status.value.show = false;
       status.value.loading = false;
       emit("error", error);
+      emit("loading", false);
     });
 };
 
@@ -457,6 +454,7 @@ const muteMe = (type = "audio") => {
 
 const start = () => {
   status.value.loading = true;
+  emit("loading", true);
   let startTimeout = setTimeout(() => {
     connectNow();
     emit("started");
@@ -470,6 +468,7 @@ const stop = () => {
   unwatcherMv2();
   if (conference.value?.isJoined()) {
     status.value.loading = true;
+    emit("loading", true);
     conference.value.leave().then(() => {
       status.value.show = false;
       status.value.loading = false;
@@ -481,6 +480,7 @@ const stop = () => {
       localVideoTrack.value = null;
       baseKey.value = new Date().getTime();
       emit("stopped");
+      emit("loading", false);
     });
 
     // Remove EventListeners
@@ -507,11 +507,18 @@ const unwatcherMv2 = watch(
   }
 );
 
+const isReady = ref(false);
 onMounted(() => {
-  emit("ready");
-  if (props.autoConnect) {
-    start();
-  }
+  loadScripts(["DEBUG", "INFO"].includes(props.debugLevel)).then(() => {
+    JitsiMeetJS = window.JitsiMeetJS;
+    JitsiMeetJS.init();
+    JitsiMeetJS.setLogLevel(JitsiMeetJS.logLevels[LOGLEVEL]);
+    emit("ready");
+    isReady.value = true;
+    if (props.autoConnect) {
+      start();
+    }
+  });
 });
 
 onBeforeUnmount(() => {

@@ -1,11 +1,13 @@
-# Toneflix Vue Video Conferencing
+# Toneflix Vue Video Conferencing (Lite)
 
-[![npm](https://img.shields.io/npm/v/vue-video-conference.svg)](https://www.npmjs.com/package/vue-video-conference)
-[![npm](https://img.shields.io/npm/dt/vue-video-conference.svg)](https://www.npmjs.com/package/vue-video-conference)
-[![npm](https://img.shields.io/npm/l/vue-video-conference.svg)](https://www.npmjs.com/package/vue-video-conference)
+[![npm](https://img.shields.io/npm/v/vue-video-conference-lite.svg)](https://www.npmjs.com/package/vue-video-conference-lite)
+[![npm](https://img.shields.io/npm/dt/vue-video-conference-lite.svg)](https://www.npmjs.com/package/vue-video-conference-lite)
+[![npm](https://img.shields.io/npm/l/vue-video-conference-lite.svg)](https://www.npmjs.com/package/vue-video-conference-lite)
 
-This is a simple video conferencing library built for Vue.js (Vue 3) with Jitsi Meet API (Low Level).
+This is a lite version of the [Toneflix Vue Video Conferencing](https://www.npmjs.com/package/vue-video-conference) library, the [Toneflix Vue Video Conferencing](https://www.npmjs.com/package/vue-video-conference) library is a simple video conferencing library built for Vue.js (Vue 3) with Jitsi Meet API (Low Level).
 The library allows you to create a voice/video conferencing solution with support for one to many connection.
+
+This lite version of the library is stripped down of the base dependencies, although it still offers the same functionality as the full version of the library, the lite version rather opts for the CDN version of the Jitsi Meet API instead of the third party NPM libraries used in the full version of the library making it a lot lighter and with less bloat.
 
 <p align="center" style="gap: 10px; display: flex; justify-content: center">
     <img width="95" height="90" src="logo.png" alt="Toneflix Vue Video Conferencing">
@@ -19,7 +21,7 @@ Supports only Vue >= 3
 ## Installation and usage
 
 ```bash
-$ npm i vue-video-conference
+$ npm i vue-video-conference-lite
 ```
 
 `Main.js`
@@ -163,9 +165,30 @@ The stop function allows you to stop the video conferencing component.
 
 ## Events
 
+### loading
+
+The loading event is emitted when the video conferencing component is making a request to the server.
+
+```html
+<template>
+  <VideoConference @loading="onLoading" />
+</template>
+
+<script>
+  export default {
+    methods: {
+      onLoading(loadingState) {
+        console.log("loading", loadingState);
+      },
+    },
+  };
+</script>
+```
+
 ### ready
 
-The ready event is emitted when the video conferencing component is mounted and ready to be used.
+The ready event is emitted when the video conferencing component is
+mounted and ready to be used.
 
 ```html
 <template>
@@ -321,4 +344,8 @@ The error event is emitted when an error occurs.
     },
   };
 </script>
+```
+
+```
+
 ```

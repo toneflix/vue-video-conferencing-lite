@@ -43,7 +43,6 @@
 </template>
 
 <script setup>
-import JMeetJS from "@joinera/lib-jitsi-meet";
 import VueFeather from "vue-feather";
 import SceneModal from "./SceneModal.vue";
 import { ref } from "vue";
@@ -65,12 +64,9 @@ const device = ref({
 });
 const configDialog = ref(false);
 
-/**
- * @type {JMeetJS}
- */
-const JitsiMeetJS = window.JitsiMeetJS || JMeetJS;
-
 const configureCall = () => {
+  const JitsiMeetJS = window.JitsiMeetJS || {};
+
   if (!props.room) return;
   emit("configuring");
   // Pass the current devices to the device list
@@ -93,6 +89,8 @@ const configureCall = () => {
 };
 
 const changeInputOutputDevice = async (selected, type) => {
+  const JitsiMeetJS = window.JitsiMeetJS || {};
+
   if (!props.room) return;
 
   if (type === "audioinput" || type === "videoinput") {

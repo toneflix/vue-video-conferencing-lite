@@ -143,7 +143,7 @@ const lstnrs = {
  * @param { String } str
  */
 const trimName = (str) => {
-  return str.substring(0, 2);
+  return status.value.videoMuted ? str.substring(0, 2) : str;
 };
 
 const canvasTimeout = ref(null);

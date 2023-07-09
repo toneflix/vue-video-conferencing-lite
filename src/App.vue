@@ -21,18 +21,24 @@
     :userName="conference.userName"
     v-if="conference.start"
     @stopped="conference.start = false"
+    @error="error"
   />
 </template>
 
 <script setup>
 import { ref } from "vue";
-import VideoConference from "./components/VideoConferencing.vue";
-// import { VideoConference } from "vue-video-conference";
+// import VideoConference from "./components/VideoConferencing.vue";
+import { VideoConference } from "vue-video-conference-lite";
 const conference = ref({
-  debugLevel: "ERROR",
+  debugLevel: "INFO", //"ERROR",
   roomName: "test-dare-devil-room",
   userName: "test-dare-devil-1",
 });
+
+const error = (e) => {
+  alert(e);
+  conference.value.start = false;
+};
 
 const submit = (e) => {
   e.preventDefault();
@@ -45,7 +51,7 @@ const submit = (e) => {
 </script>
 
 <style lang="scss">
-@import "vue-video-conference/dist/core.css";
+@import "vue-video-conference-lite/dist/core.css";
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

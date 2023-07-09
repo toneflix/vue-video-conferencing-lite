@@ -7,11 +7,11 @@ export default [
         output: [
             {
                 format: 'esm',
-                file: 'dist/vue-video-conferencing.mjs'
+                file: 'dist/vue-video-conferencing-lite.mjs'
             },
             {
                 format: 'cjs',
-                file: 'dist/vue-video-conferencing.cjs'
+                file: 'dist/vue-video-conferencing-lite.cjs'
             }
         ],
         plugins: [
