@@ -1,1 +1,0 @@
-export const siteData = JSON.parse("{\"base\":\"/vue-video-conferencing/\",\"lang\":\"en-US\",\"title\":\"Toneflix Vue Video Conferencing\",\"description\":\"Toneflix Vue Video Conferencing Documentation\",\"head\":[],\"locales\":{}}")
