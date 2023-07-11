@@ -30,7 +30,7 @@ $ npm i vue-video-conference-lite
 import { createApp } from "vue";
 import App from "./App.vue";
 
-import conferencing from "vue-video-conference";
+import conferencing from "vue-video-conference-lite";
 
 createApp(App).use(conferencing).mount("#app");
 ```
@@ -53,7 +53,7 @@ It is also possible to use the library directly in your component without instal
 </template>
 
 <script>
-  import { VideoConference } from "vue-video-conference";
+  import { VideoConference } from "vue-video-conference-lite";
 
   export default {
     components: {
@@ -67,7 +67,7 @@ It is also possible to use the library directly in your component without instal
 
 ```html
 <style>
-  @import "vue-video-conference/dist/core.css";
+  @import "vue-video-conference-lite/dist/core.css";
 </style>
 ```
 
